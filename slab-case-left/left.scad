@@ -1,3 +1,6 @@
+// Arc+Circle resolution - 16 if previewing.
+$fn = $preview ? 16 : 128;
+
 // Driving parameters
 
 // Vertical stagger amount per column (mm)
@@ -22,9 +25,15 @@ screwholes = [
     [3.75,19], // H8
     [19,80.5], // H9
 ];
+heatset_post_depth = 5.5;
 
 // Distance between PCB and internal case edge.
 pcb_spacing = 0.5;
+
+// Width of the case wall.
+case_width = 1.8;
+case_depth = 7.5;
+case_floor_thickness = 0.4;
 
 // Code
 
@@ -32,42 +41,49 @@ pcb_spacing = 0.5;
 column_widths_sum = [ for (a=0, b=column_widths[0]; a < len(column_widths); a= a+1, b=b+(column_widths[a]==undef?0:column_widths[a])) b];;
 row_heights_sum = [ for (a=0, b=row_heights[0]; a < len(row_heights); a= a+1, b=b+(row_heights[a]==undef?0:row_heights[a])) b];;
 
-// Model the PCB outline based on column and row inputs
-for (c = [0:len(columns)-1]) {
-    for (r = [0:len(rows)-1]) {
-        // X and Y are the top-left corner of every key on the keyboard.
-        x = (column_widths_sum[c-1]==undef?0:column_widths_sum[c-1]) + rows[r];
-        y = (row_heights_sum[r-1]==undef?0:row_heights_sum[r-1]) + columns[c];
-        // Add a square per key
-        color("green")
+// PCB is an object repesenting the physical circuitboard.
+module pcb() {
+    for (c = [0:len(columns)-1]) {
+        for (r = [0:len(rows)-1]) {
+            // X and Y are the top-left corner of every key on the keyboard.
+            x = (column_widths_sum[c-1]==undef?0:column_widths_sum[c-1]) + rows[r];
+            y = (row_heights_sum[r-1]==undef?0:row_heights_sum[r-1]) + columns[c];
+            // Add a square per key
             translate([x,y,0])
-                linear_extrude(1.6)
-                    square([column_widths[c],row_heights[r]], center = false);
+            square([column_widths[c],row_heights[r]], center = false);
+        }
+    };
+};
+
+// Screwholes creates circles of the given radius at every screwhole location.
+module screwholes( diameter) {
+    for (i = [0:len(screwholes)-1]) {
+        translate([screwholes[i].x,screwholes[i].y,0])
+        circle(diameter/2);
     }
+};
+
+color("green")
+translate([0,0,heatset_post_depth])
+linear_extrude(1.6)
+difference() {
+    pcb();
+    screwholes(3.2);
 }
 
-// Model the outline of the case
-pcb_outline_top = [for(c = [0:len(columns)*2]) [
-]];
+linear_extrude(case_depth)
+difference() {
+    offset(pcb_spacing+case_width) { pcb(); };
+    offset(pcb_spacing) { pcb(); };
+};
 
-pcb_outline_bottom = [for(c = [len(columns):-1:0]) [
-]];
+linear_extrude(heatset_post_depth)
+difference() {
+    screwholes(8);
+    screwholes(4.6);
+};
 
-pcb_outline = concat(pcb_outline_top,pcb_outline_bottom);
+translate([0,0,-case_floor_thickness])
+linear_extrude(case_floor_thickness)
+offset(pcb_spacing+case_width) { pcb(); };
 
-echo(pcb_outline);
-
-color("red")
-translate([0,0,2])
-linear_extrude(20)
-polygon(pcb_outline);
-
-// Add screw posts for heat-set inserts
-for (i = [0:len(screwholes)-1]) {
-    translate([screwholes[i].x,screwholes[i].y,0])
-        linear_extrude(5.5)
-            difference() {
-                circle(d=8);
-                circle(d=4.6);
-            };
-}
