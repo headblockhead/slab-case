@@ -3,8 +3,8 @@ $fn = $preview ? 16 : 128;
 
 // Components
 // comment/uncomment these when exporting for seperate files.
-//case();
-plate();
+case();
+//plate();
 
 //pcb_visualisation();
 
@@ -54,10 +54,10 @@ screwholes = [
 heatset_post_depth = 5.5;
 
 feet = [
- [column_widths_sum[1],30],
- [column_widths_sum[len(columns)-3],30],
- [column_widths_sum[0],70],
- [column_widths_sum[len(columns)-2],70]
+ [10,10],
+ [column_widths_sum[len(columns)-1]-10,10],
+ [10,row_heights_sum[len(rows)-1]-10],
+ [column_widths_sum[len(columns)-1]-10,row_heights_sum[len(rows)-1]-10]
 ];
 feet_diameter = 12.1;
 
