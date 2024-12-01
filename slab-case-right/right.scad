@@ -20,6 +20,10 @@ rows = [0,0,0,0,0];
 // Height of each row (mm)
 row_heights = [19,19,19,19,19];
 
+// generate a new list based on the sum of every item before it. Don't modify!
+column_widths_sum = [ for (a=0, b=column_widths[0]; a < len(column_widths); a= a+1, b=b+(column_widths[a]==undef?0:column_widths[a])) b];;
+row_heights_sum = [ for (a=0, b=row_heights[0]; a < len(row_heights); a= a+1, b=b+(row_heights[a]==undef?0:row_heights[a])) b];;
+
 // Which columns and rows have keys?
 key_locations = [   
    // every row (0-4, 5 total) in columns 1,2,3,4,5, and 6. (0-indexed)
@@ -30,8 +34,8 @@ xiao_location = [7,4];
 display_location = [7,0];
 encoder_location = [0,0];
 slider_location = [0,2];
-trrs_left_y = 90.05;
-trrs_right_y = 65.5;
+trrs_left_y = 91.05;
+trrs_right_y = 66;
 magnet_left_y = 47.5;
 magnet_right_y = 47.5;
 
@@ -49,6 +53,14 @@ screwholes = [
 ];
 heatset_post_depth = 5.5;
 
+feet = [
+ [column_widths_sum[1],30],
+ [column_widths_sum[len(columns)-3],30],
+ [column_widths_sum[0],70],
+ [column_widths_sum[len(columns)-2],70]
+];
+feet_diameter = 12.1;
+
 // Distance between PCB and internal case edge.
 pcb_spacing = 0.5;
 
@@ -58,16 +70,12 @@ pcb_thickness = 1.6;
 // Width of the case wall.
 case_width = 1.8;
 case_depth = 7.5;
-case_floor_thickness = 0.4;
+case_floor_thickness = 1;
 
 // Siderails for alligning plate
 siderail_height = 2.5;
 
 // Code
-
-// generate a new list based on the sum of every item before it.
-column_widths_sum = [ for (a=0, b=column_widths[0]; a < len(column_widths); a= a+1, b=b+(column_widths[a]==undef?0:column_widths[a])) b];;
-row_heights_sum = [ for (a=0, b=row_heights[0]; a < len(row_heights); a= a+1, b=b+(row_heights[a]==undef?0:row_heights[a])) b];;
 
 // PCB is an object repesenting the physical circuitboard.
 module pcb() {
@@ -125,9 +133,18 @@ module case() {
     };
 
     // Add a floor.
-    translate([0,0,-case_floor_thickness])
-    linear_extrude(case_floor_thickness)
-    offset(pcb_spacing+case_width) { pcb(); };
+        render()
+    difference() {
+        translate([0,0,-case_floor_thickness])
+        linear_extrude(case_floor_thickness)
+        offset(pcb_spacing+case_width) { pcb(); };
+        
+        // Add indents for the rubber feet
+        for (i = [0:len(feet)-1]) {
+            translate([feet[i].x,feet[i].y,-case_floor_thickness])
+            cylinder(0.5,d=feet_diameter);
+        }
+    };
 
     // Add the left siderail.
     render()
@@ -189,8 +206,8 @@ module keycutouts() {
           }
           if (keyboard_vector == display_location) {
               linear_extrude(5)
-              translate([x+(column_widths[c]/2)-7.5,y+(row_heights[r]/2)-4])
-              square([15,45]);
+              translate([x+(column_widths[c]/2)-7.5,y+(row_heights[r]/2)-2.5])
+              square([15,42]);
           }
           if (keyboard_vector == encoder_location) {
               linear_extrude(5)
@@ -213,7 +230,7 @@ module keycutouts() {
 
     linear_extrude(5)
     translate([column_widths_sum[len(columns)-1] - column_widths[len(columns)-1]/2 + 6, trrs_right_y])
-    square([15,12], center = true);
+    square([15,11], center = true);
 };
 
 // makes an M3 countersunk hole.
