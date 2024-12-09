@@ -3,8 +3,16 @@
 // Comment/uncomment these when exporting for seperate files.
 // -----
 
-case();
-plate();
+// render_case and render_plate are set by the openscad CLI.
+if (render_case) {
+  case();
+}
+if (render_plate) {
+  plate();
+}
+
+// case();
+// plate();
 
 // -----
 // Visualisations
