@@ -1,6 +1,6 @@
 # Slab Case
 
-[![Nix Flake](https://img.shields.io/badge/NIX%20FLAKE-5277C3.svg?logo=NixOS&logoColor=white)](https://nixos.org) [![xc compatible](https://xcfile.dev/badge.svg)](https://xcfile.dev) 
+[![Nix Flake](https://img.shields.io/badge/NIX%20FLAKE-5277C3.svg?logo=NixOS&logoColor=white)](https://nixos.org) [![xc compatible](https://xcfile.dev/badge.svg)](https://xcfile.dev) [![OpenSCAD](https://img.shields.io/badge/OPENSCAD-f9f9f9.svg?logo=openscad&logoColor=#FFF662)](https://openscad.org)
 
 The 3D-models and downloads for the [Slab keyboard project](https://github.com/headblockhead/slab).
 
