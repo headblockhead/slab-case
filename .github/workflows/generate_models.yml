@@ -1,0 +1,35 @@
+name: Generate 3D Models
+on: [push, pull_request]
+
+jobs:
+  generate_models:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: DeterminateSystems/nix-installer-action@main
+    - uses: DeterminateSystems/magic-nix-cache-action@main
+    - run: nix build
+    - uses: actions/upload-artifact@v4
+      with:
+        name: left_case.stl
+        path: result/left_case.stl
+    - uses: actions/upload-artifact@v4
+      with:
+        name: left_plate.stl
+        path: result/left_plate.stl
+    - uses: actions/upload-artifact@v4
+      with:
+        name: right_case.stl
+        path: result/right_case.stl
+    - uses: actions/upload-artifact@v4
+      with:
+        name: right_plate.stl
+        path: result/right_plate.stl
+    - uses: actions/upload-artifact@v4
+      with:
+        name: hackpad_case.stl
+        path: result/hackpad_case.stl
+    - uses: actions/upload-artifact@v4
+      with:
+        name: hackpad_plate.stl
+        path: result/hackpad_plate.stl
