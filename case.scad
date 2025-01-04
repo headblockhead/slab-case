@@ -195,11 +195,11 @@ module keycutouts() {
            }
     };
     linear_extrude(5)
-    translate([0, trrs_left_y])
+    translate([0, trrs_left_y-5])
     square([15.1,10]);
 
     linear_extrude(5)
-    translate([column_widths_sum[len(columns)-1] - 15.1, trrs_right_y])
+    translate([column_widths_sum[len(columns)-1] - 15.1, trrs_right_y-5])
     square([15.1,10]);
 };
 
@@ -212,12 +212,12 @@ module countersunkscrewhole() {
 }
 
 module trrs_l_hole() {
-     translate([-pcb_spacing-case_width, trrs_left_y+4.5, 10])
+     translate([-pcb_spacing-case_width, trrs_left_y, 10])
      rotate([0,90,0]) 
      cylinder(pcb_spacing+case_width, d=9);
 }
 module trrs_r_hole() {
-translate([column_widths_sum[len(columns)-1], trrs_right_y+4.5, 10])
+translate([column_widths_sum[len(columns)-1], trrs_right_y, 10])
      rotate([0,90,0]) 
      cylinder(pcb_spacing+case_width, d=9);
 }

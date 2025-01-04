@@ -48,8 +48,8 @@ encoder_location = [0,0];
 slider_location = [0,2];
 
 // Height (mm) from the origin of the magnet connectors, and the trrs sockets.
-trrs_left_y = 85.05;
-trrs_right_y = 60;
+trrs_left_y = 90;
+trrs_right_y = 65.5;
 magnet_left_y = 47.5;
 magnet_right_y = 47.5;
 
