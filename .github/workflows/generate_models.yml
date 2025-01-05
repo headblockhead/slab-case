@@ -2,7 +2,7 @@ name: Generate 3D Models
 on: [push, pull_request]
 
 jobs:
-  generate_models:
+  generate:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
