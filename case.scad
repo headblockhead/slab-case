@@ -175,9 +175,13 @@ module keycutouts() {
                   square([22,23], center = true);
           }
           if (keyboard_vector == display_location) {
+              // Display hole
               linear_extrude(5)
               translate([x+(column_widths[c]/2)-7.5,y+(row_heights[r]/2)-2.5])
               square([15,42]);
+              // Letter plate cutout
+              translate([x+(column_widths[c]/2)-7.5+(15/2),y+(row_heights[r]/2)-2.5+42+5.5,4])
+              cube([8.2,8.2,2], center = true);
           }
           if (keyboard_vector == encoder_location) {
               linear_extrude(5)

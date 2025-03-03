@@ -30,16 +30,19 @@
               runHook preBuild
               openscad -D render_case=true -o left_case.stl left.scad
               openscad -D render_plate=true -o left_plate.stl left.scad
+              openscad -D letter='"L"' -o left_letterplate.stl letterplate.scad
               openscad -D render_case=true -o right_case.stl right.scad
               openscad -D render_plate=true -o right_plate.stl right.scad
+              openscad -D letter='"R"' -o right_letterplate.stl letterplate.scad
               openscad -D render_case=true -o hackpad_case.stl hackpad.scad
               openscad -D render_plate=true -o hackpad_plate.stl hackpad.scad
+              openscad -D letter='"H"' -o hackpad_letterplate.stl letterplate.scad
               runHook postBuild
             '';
             installPhase = ''
               runHook preInstall
               mkdir -p $out
-              cp {left,right,hackpad}_{case,plate}.stl $out
+              cp {left,right,hackpad}_{case,plate,letterplate}.stl $out
               runHook postInstall
             '';
           };
